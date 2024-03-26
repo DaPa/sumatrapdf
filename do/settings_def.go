@@ -360,6 +360,8 @@ var (
 			"default position (can be on any monitor)").setStructName("Rect").setDoc("default position (x, y) and size (width, height) of the window"),
 		mkField("UseTabs", Bool, true,
 			"if true, documents are opened in tabs instead of new windows").setVersion("3.0"),
+		mkField("CtrlTabLastViewed", Bool, false,
+			"if true, Ctrl+Tab cycles through tabs in recently used order").setVersion("3.6"),
 		mkField("UseSysColors", Bool, false,
 			"if true, we use Windows system colors for background/text color. Over-rides other settings").setExpert(),
 		mkField("CustomScreenDPI", Int, 0,

@@ -423,6 +423,8 @@ struct GlobalPrefs {
     Rect windowPos;
     // if true, documents are opened in tabs instead of new windows
     bool useTabs;
+    // if true, Ctrl+Tab cycles through tabs in recently used order
+    bool ctrlTabLastViewed;
     // if true, we use Windows system colors for background/text color.
     // Over-rides other settings
     bool useSysColors;
@@ -714,6 +716,7 @@ static const FieldInfo gGlobalPrefsFields[] = {
     {offsetof(GlobalPrefs, windowState), SettingType::Int, 1},
     {offsetof(GlobalPrefs, windowPos), SettingType::Compact, (intptr_t)&gRectInfo},
     {offsetof(GlobalPrefs, useTabs), SettingType::Bool, true},
+    {offsetof(GlobalPrefs, ctrlTabLastViewed), SettingType::Bool, false},
     {offsetof(GlobalPrefs, useSysColors), SettingType::Bool, false},
     {offsetof(GlobalPrefs, customScreenDPI), SettingType::Int, 0},
     {(size_t)-1, SettingType::Comment, 0},
@@ -733,7 +736,7 @@ static const StructInfo gGlobalPrefsInfo = {
     "Shortcuts\0EscToExit\0ReuseInstance\0ReloadModifiedDocuments\0\0MainWindowBackground\0FullPathInTitle\0ShowMenubar"
     "\0ShowToolbar\0ShowFavorites\0ShowToc\0NoHomeTab\0ShowLinks\0TocDy\0SidebarDx\0ToolbarSize\0TabWidth\0TreeFontSize"
     "\0TreeFontWeightOffset\0TreeFontName\0SmoothScroll\0ShowStartPage\0CheckForUpdates\0VersionToSkip\0WindowState\0Wi"
-    "ndowPos\0UseTabs\0UseSysColors\0CustomScreenDPI\0\0FileStates\0SessionData\0ReopenOnce\0TimeOfLastUpdateCheck\0Ope"
+    "ndowPos\0UseTabs\0CtrlTabLastViewed\0UseSysColors\0CustomScreenDPI\0\0FileStates\0SessionData\0ReopenOnce\0TimeOfLastUpdateCheck\0Ope"
     "nCountWeek\0\0"};
 
 #endif
