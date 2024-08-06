@@ -36,6 +36,12 @@
 
 #include "utils/Log.h"
 
+// used only if gGlobalPrefs->ctrlTabSmartLastViewed is true
+static int lastViewedNdx = -1;
+// used to avoid changing lastViewedNdx during startup
+extern bool gIsStartup; // setup to true then false during WinMain from SumatraStartup.cpp
+
+
 static void UpdateTabTitle(WindowTab* tab) {
     if (!tab) {
         return;
@@ -212,6 +218,28 @@ void TabsSelect(MainWindow* win, int tabIndex) {
     }
     WindowTab* tab = tabs[tabIndex];
     LoadModelIntoTab(tab);
+}
+
+int TabsGetLastViewedNdx(MainWindow* win, int advance) {
+    if (!win) {
+        return advance;
+    }
+    int count = win->TabCount();
+    if (count < 2) {
+        return advance;
+    }
+
+    // if true, smart Ctrl+Tab cycles through tabs in recently used order
+    bool ctrlTabSmartLastViewed = gGlobalPrefs->ctrlTabSmartLastViewed;
+
+    int curNdx = win->tabsCtrl->GetSelected();
+    logf("TabsGetLastViewedNdx: ctrlTabSmartLastViewed = %d, curNdx = %d, lastViewedNdx = %d, count = %d\n",
+        ctrlTabSmartLastViewed, curNdx, lastViewedNdx, count);
+    if (!ctrlTabSmartLastViewed || (lastViewedNdx < 0) || (lastViewedNdx >= count) || (lastViewedNdx == curNdx)) {
+        return advance;
+    } else {
+        return lastViewedNdx - curNdx;
+    }
 }
 
 // clang-format off
@@ -473,6 +501,9 @@ void SaveCurrentWindowTab(MainWindow* win) {
     int current = win->tabsCtrl->GetSelected();
     if (-1 == current) {
         return;
+    } else if (!gIsStartup && gGlobalPrefs->ctrlTabSmartLastViewed) {
+        // tab changed: keep track of the latest tab, so that smart Ctrl+Tab can switch back to it!
+        lastViewedNdx = current;
     }
     if (win->CurrentTab() != win->Tabs().at(current)) {
         return; // TODO: restore ReportIf() ?
@@ -585,6 +616,7 @@ void TabsOnCtrlTab(MainWindow* win, bool reverse) {
     if (count < 2) {
         return;
     }
+    // this is classic CmdNextTab/CmdPrevTab handling: this should not be affected by ctrlTabSmartLastViewed!
     int idx = win->tabsCtrl->GetSelected() + 1;
     if (reverse) {
         idx -= 2;
