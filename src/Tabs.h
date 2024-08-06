@@ -11,6 +11,7 @@ WindowTab* AddTabToWindow(MainWindow* win, WindowTab* tab);
 void TabsOnCloseWindow(MainWindow*);
 void TabsOnChangedDoc(MainWindow*);
 void TabsSelect(MainWindow* win, int tabIndex);
+int TabsGetLastViewedNdx(MainWindow* win, int advance);
 void TabsOnCtrlTab(MainWindow* win, bool reverse);
 // also shows/hides the tabbar when necessary
 void UpdateTabWidth(MainWindow*);

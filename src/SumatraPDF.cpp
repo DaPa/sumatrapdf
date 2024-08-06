@@ -5303,6 +5303,8 @@ static LRESULT FrameOnCommand(MainWindow* win, HWND hwnd, UINT msg, WPARAM wp, L
         case CmdPrevTabSmart: {
             if (win && win->TabCount() > 1) {
                 int advance = cmdId == CmdNextTabSmart ? 1 : -1;
+                // if ctrlTabSmartLastViewed is true, then switch to lastViewedNdx instead!
+                advance = TabsGetLastViewedNdx(win, advance);
                 RunCommandPallette(win, kPalettePrefixTabs, advance);
             }
         } break;
